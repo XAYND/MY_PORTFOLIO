@@ -18,7 +18,7 @@ function typeWriter(text, elementId, speed = 60) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // === Lance le message d’accueil
+  // === Message d’accueil
   typeWriter("Bienvenue sur mon portfolio", "landing-title", 70);
 
   // === Animation fade-in-up
@@ -32,14 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.3 });
   animatedElements.forEach(el => fadeObserver.observe(el));
 
-  // === Animation au scroll avec IntersectionObserver
+  // === Animation au scroll (.animate-on-scroll + autres)
   const skillBars = document.querySelectorAll('.skill-bar');
   const skillImages = document.querySelectorAll('.skill-image');
   const projectItems = document.querySelectorAll('.project-item');
   const activityCards = document.querySelectorAll('.activity-card');
   const textElements = document.querySelectorAll('.animate-on-scroll');
 
-  const observer = new IntersectionObserver(entries => {
+  const visibilityObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       const bar = entry.target.querySelector('.bar');
       if (entry.isIntersecting) {
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }, { threshold: 0.5 });
 
-  [...skillBars, ...skillImages, ...projectItems, ...activityCards, ...textElements].forEach(el => observer.observe(el));
+  [...skillBars, ...skillImages, ...projectItems, ...activityCards, ...textElements].forEach(el => visibilityObserver.observe(el));
 
   // === Affichage conditionnel des sections Épreuves
   document.querySelectorAll('.epreuve-card, .sub-link').forEach(btn => {
@@ -74,22 +74,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function toggleEpreuveSection(targetId) {
-  document.querySelectorAll('.epreuve-content').forEach(section => {
-    if (section.id === targetId) {
-      section.classList.remove('hidden-section');
-      section.classList.add('show-section');
+    document.querySelectorAll('.epreuve-content').forEach(section => {
+      if (section.id === targetId) {
+        section.classList.remove('hidden-section');
+        section.classList.add('show-section');
 
-      const yOffset = -60;
-      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-
-    } else {
-      section.classList.remove('show-section');
-      section.classList.add('hidden-section');
-    }
-  });
-}
-
+        const yOffset = -60;
+        const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      } else {
+        section.classList.remove('show-section');
+        section.classList.add('hidden-section');
+      }
+    });
+  }
 
   // === Navigation normale (hors E5/E6)
   document.querySelectorAll('nav a:not(.sub-link)').forEach(link => {
@@ -109,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // === Affiche la photo au survol (si activé pour les membres d’équipe)
+  // === Photo au survol pour l’équipe
   const persons = document.querySelectorAll('.person-hover');
   persons.forEach(el => {
     const id = el.dataset.person;
@@ -129,17 +127,17 @@ document.addEventListener("DOMContentLoaded", () => {
       tooltip.style.display = 'none';
     });
   });
+
+  // === Animation ligne (ex: arbre généalogique, parcours, etc.)
+  const animatedLines = document.querySelectorAll(".animated-line");
+  const lineObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.remove("reset-animation");
+        void entry.target.offsetWidth;
+        entry.target.classList.add("reset-animation");
+      }
+    });
+  }, { threshold: 0.3 });
+  animatedLines.forEach(el => lineObserver.observe(el));
 });
-const animatedLines = document.querySelectorAll(".animated-line");
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.remove("reset-animation"); // au cas où elle l’a encore
-      void entry.target.offsetWidth; // 🔄 trigger reflow
-      entry.target.classList.add("reset-animation"); // relance
-    }
-  });
-}, { threshold: 0.3 });
-
-animatedLines.forEach(el => observer.observe(el));
