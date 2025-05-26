@@ -2257,6 +2257,9 @@ section:not(.presentation-section):not(.contact-section):not(#parcours) {
   margin: 40px auto 20px;
   color: #facc15;
 }
+#veille {
+  border: 2px dashed yellow;
+}
 
 body {
   overflow-x: hidden;
