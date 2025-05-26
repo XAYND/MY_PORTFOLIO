@@ -141,3 +141,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.3 });
   animatedLines.forEach(el => lineObserver.observe(el));
 });
+// Si besoin : activer animation au scroll
+document.addEventListener("DOMContentLoaded", () => {
+  const quantumSection = document.querySelector('.quantum-container');
+  if (quantumSection) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          quantumSection.classList.add('animate');
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe(quantumSection);
+  }
+});
